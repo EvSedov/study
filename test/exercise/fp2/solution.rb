@@ -13,11 +13,10 @@ module Exercise
 
       # Написать свою функцию my_map
       def my_map(&func)
-        new_array = []
-        for item in self
-          new_array << func.call(item)
+        new_array = MyArray.new([])
+        my_reduce(new_array) do |memo, element|
+          memo << func.call(element)
         end
-        MyArray.new(new_array)
       end
 
       # Написать свою функцию my_compact
@@ -32,16 +31,16 @@ module Exercise
 
       # Написать свою функцию my_reduce
       def my_reduce(memo = nil, operator = nil, &block)
-        block = if operator == Symbol
-                  ->(acc, value) { acc.send(operator, value) }
-                elsif operator.nil?
-                  block
-                end
         new_array = self
         if memo.nil?
           new_array = self[1..-1]
           memo = self[0]
         end
+        block = if operator == Symbol
+                  ->(acc, value) { acc.send(operator, value) }
+                elsif operator.nil?
+                  block
+                end
         for item in new_array
           memo = block.call(memo, item)
         end
