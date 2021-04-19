@@ -36,21 +36,20 @@ module Exercise
       end
 
       # Написать свою функцию my_reduce
-      def my_reduce(memo = nil, operator = nil, &block)
+      def my_reduce(memo = nil, &block)
         new_array = self
-        if memo.nil?
-          new_array = self[1..-1]
-          memo = self[0]
-        end
-        block = if operator == Symbol
-                  ->(acc, value) { acc.send(operator, value) }
-                elsif operator.nil?
-                  block
-                end
-        for item in new_array
-          memo = block.call(memo, item)
-        end
-        memo
+        my_reduce_recurs = lambda { |elements, acc, &fn|
+          return acc if elements.empty?
+
+          first, *rest = elements
+          if acc.nil?
+            acc = first
+            first, *rest = rest
+          end
+          acc = fn.call(acc, first)
+          my_reduce_recurs.call(rest, acc, &fn)
+        }
+        my_reduce_recurs.call(new_array, memo, &block)
       end
     end
   end
