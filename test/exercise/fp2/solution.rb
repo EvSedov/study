@@ -6,9 +6,15 @@ module Exercise
 
       # Написать свою функцию my_each
       def my_each(&func)
-        for item in self
-          func.call(item)
-        end
+        new_array = self
+        my_each_recurs = lambda { |elements, &fn|
+          return self if elements.empty?
+
+          first, *rest = elements
+          fn.call(first)
+          my_each_recurs.call(rest, &fn)
+        }
+        my_each_recurs.call(new_array, &func)
       end
 
       # Написать свою функцию my_map
