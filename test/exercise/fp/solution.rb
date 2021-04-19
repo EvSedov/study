@@ -6,10 +6,8 @@ module Exercise
       # film["genres"], film["year"], film["access_level"], film["country"]
       def rating(array)
         new_array = array
-                    .reject { |film| film['country'].nil? }
+                    .reject { |film| film['country'].nil? || film['rating_kinopoisk'].nil? || film['rating_kinopoisk'].to_i.zero? }
                     .select { |film| film['country'].split(',').length > 1 }
-                    .reject { |film| film['rating_kinopoisk'].nil? }
-                    .reject { |film| film['rating_kinopoisk'].to_i.zero? }
         sum_of_ratings = new_array.reduce(0) { |acc, film| acc + film['rating_kinopoisk'].to_f }
         result = sum_of_ratings / new_array.length
         result
