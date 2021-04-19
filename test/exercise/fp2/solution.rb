@@ -27,12 +27,12 @@ module Exercise
 
       # Написать свою функцию my_compact
       def my_compact(&func)
-        new_array = []
-        for item in self
-          predicate = func.nil? ? item.nil? : func.call(item)
-          new_array << item unless predicate
+        new_array = MyArray.new([])
+        my_reduce(new_array) do |memo, element|
+          predicate = func.nil? ? element.nil? : func.call(element)
+          memo << element unless predicate
+          memo
         end
-        MyArray.new(new_array)
       end
 
       # Написать свою функцию my_reduce
