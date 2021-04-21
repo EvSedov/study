@@ -7,14 +7,14 @@ module Exercise
       # Написать свою функцию my_each
       def my_each(&func)
         new_array = self
-        my_each_recurs = lambda { |elements, &fn|
+        def my_each_recurs(elements, &fnc)
           return self if elements.empty?
 
           first, *rest = elements
-          fn.call(first)
-          my_each_recurs.call(rest, &fn)
-        }
-        my_each_recurs.call(new_array, &func)
+          fnc.call(first)
+          my_each_recurs(rest, &fnc)
+        end
+        my_each_recurs(new_array, &func)
       end
 
       # Написать свою функцию my_map
@@ -36,20 +36,16 @@ module Exercise
       end
 
       # Написать свою функцию my_reduce
-      def my_reduce(memo = nil, &block)
-        new_array = self
-        my_reduce_recurs = lambda { |elements, acc, &fn|
-          return acc if elements.empty?
+      def my_reduce(memo = nil, &func)
+        first, *rest = self
+        if memo.nil?
+          memo = first
+          first, *rest = rest
+        end
+        memo = func.call(memo, first)
+        return memo if rest.empty?
 
-          first, *rest = elements
-          if acc.nil?
-            acc = first
-            first, *rest = rest
-          end
-          acc = fn.call(acc, first)
-          my_reduce_recurs.call(rest, acc, &fn)
-        }
-        my_reduce_recurs.call(new_array, memo, &block)
+        MyArray.new(rest).my_reduce(memo, &func)
       end
     end
   end
