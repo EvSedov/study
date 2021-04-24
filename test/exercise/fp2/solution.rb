@@ -7,10 +7,9 @@ module Exercise
       # Написать свою функцию my_each
       def my_each(&func)
         first, *rest = self
-        return if rest.empty?
-
         func.call(first)
-        MyArray.new(rest).my_each(&func)
+        rest = MyArray.new(rest)
+        rest.my_each(&func) if rest.any?
         self
       end
 
