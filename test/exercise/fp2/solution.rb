@@ -6,15 +6,12 @@ module Exercise
 
       # Написать свою функцию my_each
       def my_each(&func)
-        new_array = self
-        def my_each_recurs(elements, &fnc)
-          return self if elements.empty?
+        first, *rest = self
+        return if rest.empty?
 
-          first, *rest = elements
-          fnc.call(first)
-          my_each_recurs(rest, &fnc)
-        end
-        my_each_recurs(new_array, &func)
+        func.call(first)
+        MyArray.new(rest).my_each(&func)
+        self
       end
 
       # Написать свою функцию my_map
